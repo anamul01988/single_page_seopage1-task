@@ -1,17 +1,3 @@
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $response = "";
-  foreach ($_FILES["file"]["error"] as $key => $error) {
-    if ($error == UPLOAD_ERR_OK) {
-      $tmp_name = $_FILES["file"]["tmp_name"][$key];
-      $name = $_FILES["file"]["name"][$key];
-      move_uploaded_file($tmp_name, "uploads/$name");
-      $response .= "$name uploaded successfully<br>";
-    }
-  }
-  echo $response;
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,8 +17,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     />
     <link rel="stylesheet" href="css/style.css" />
   </head>
+  <style media="screen">
+    #preview{
+        display: flex;
+        width: 400px;
+        height: 100px;
+        border: 1px solid black;
+        margin-top: -15px;
+        flex-wrap: wrap;
+        overflow: hidden;
+        overflow-y: scroll;
+        overflow-x: scroll;
+    }
+    #preview img{
+      width: 40px;
+      height: 40px;
+    }
+    </style>
   <body>
-    <div>
+    <div class="mainContainer">
       <!-- modal start -->
       <div id="modal-overlay">
         <div id="modal">
@@ -40,24 +43,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h2>Attachments Pop Up Window</h2>
           </div>
 
-          <!-- <div class="modal-content">
+          <div class="modal-content">
             <p>Please upload multiple attachment : </p>
-            <input
+            <!-- <input
               type="file"
               multiple
               name="file"
               id="file"
               onchange="javascript:updateList()"
-            />
+            /> -->
 
-            <p>Selected files:</p> -->
+            <p>Selected files:</p>
 
             <div id="fileList"></div>
+            <!--  -->
+            <form enctype="multipart/form-data" action="" method="post">
+                <input type="file" name="fileImg[]" id="fileImg" multiple onchange="preview();">
+                <button type="button" onclick="submitData();">Submit</button>
+            </form>
+            <p>Preview</p>
+            <div id="preview"> </div>
+            
+            <!--  -->
           </div>
 
           <div class="modal-footer">
             <button id="close-modal">Close</button>
-            <button>Save</button>
+            <!-- <button>Save</button> -->
           </div>
         </div>
       </div>
@@ -66,15 +78,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card cardArea">
           <div class="card-header">
             <div class="card-header-content">
-              <div class="box"></div>
+              <div class="box card-box0"></div>
               <h3>Incomplete</h3>
             </div>
 
             <h4><button>0</button></h4>
           </div>
-          <!-- <div class="card-body">
-               <h1> <i class="fas fa-cat"></i> This is a heading!</h1>
-           </div> -->
 
           <div class="veriousCard">
             <div class="card cardContent1">
@@ -112,7 +121,819 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p>
                   <button id="open-modal">
                     <i class="fas fa-paperclip"></i></button
-                  ><span>25</span>
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card cardArea">
+          <div class="card-header">
+            <div class="card-header-content">
+              <div class="box card-box1"></div>
+              <h3>To Do</h3>
+            </div>
+
+            <h4><button>0</button></h4>
+          </div>
+
+          <div class="veriousCard">
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card cardArea">
+          <div class="card-header">
+            <div class="card-header-content">
+              <div class="box card-box2"></div>
+              <h3>Doing</h3>
+            </div>
+
+            <h4><button>0</button></h4>
+          </div>
+
+          <div class="veriousCard">
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card cardArea">
+          <div class="card-header">
+            <div class="card-header-content">
+              <!-- <div class="box card-box2"></div> -->
+              <h3>Under Review</h3>
+            </div>
+
+            <h4><button>0</button></h4>
+          </div>
+
+          <div class="veriousCard">
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card cardArea">
+          <div class="card-header">
+            <div class="card-header-content">
+              <!-- <div class="box card-box2"></div> -->
+              <h3>Completed</h3>
+            </div>
+
+            <h4><button>0</button></h4>
+          </div>
+
+          <div class="veriousCard">
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span id="fileCounter">25</span>
                 </p>
                 <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
               </div>
@@ -121,7 +942,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
       </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      updateList = function () {
+        var input = document.getElementById("file");
+        var output = document.getElementById("fileList");
+        var children = "";
+        for (var i = 0; i < input.files.length; ++i) {
+          children += "<li>" + input.files.item(i).name + "</li>";
+        }
+        output.innerHTML = "<ul>" + children + "</ul>";
+      };
+    
 
+
+      $(document).ready(function(){
+      $.ajax({    
+        type: "GET",
+        url: "getdata.php",             
+                    
+        success: function(data){                     
+           $("#fileCounter").text(data);
+          }
+        });
+      });
+
+    </script>
+    <script type="text/javascript"> 
+     function preview(){
+      var input = document.getElementById("fileImg");
+        var output = document.getElementById("fileList");
+        var children = "";
+        var totalFiles = $('#fileImg').get(0).files.length;
+        for(var i = 0; i < totalFiles; ++i){
+          $('#preview').append("<img src = '"+URL.createObjectURL(event.target.files[i])+"'>");
+          children += "<li>" + input.files.item(i).name + "</li>";
+        }
+        output.innerHTML = "<ul>" + children + "</ul>";
+      }
+
+      function submitData(){
+        $(document).ready(function(){
+          var formData = new FormData();
+          var totalFiles = $("#fileImg").get(0).files.length;
+          for (var i = 0; i < totalFiles; i++) {
+              formData.append("fileImg[]", $("#fileImg").get(0).files[i]);
+          }
+
+          $.ajax({
+            url: 'postData.php',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success:function(response){
+              alert(response);
+              location.reload();
+            }
+          });
+        });
+      }
+     </script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"
       crossorigin="anonymous"
@@ -171,17 +1052,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         output.innerHTML = "<ul>" + children + "</ul>";
       };
-   
-    async function uploadFile() {
-    let formData = new FormData();           
-    formData.append("file", fileupload.files[0]);
-    await fetch('/index.php', {
-      method: "POST", 
-      body: formData
-    });    
-    alert('The file has been uploaded successfully.');
-}
+    
+
+
+      $(document).ready(function(){
+      $.ajax({    
+        type: "GET",
+        url: "getdata.php",             
+                    
+        success: function(data){                     
+           $("#fileCounter").text(data);
+          }
+        });
+      });
 
     </script>
+  
   </body>
 </html>
+
