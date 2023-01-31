@@ -1,0 +1,187 @@
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $response = "";
+  foreach ($_FILES["file"]["error"] as $key => $error) {
+    if ($error == UPLOAD_ERR_OK) {
+      $tmp_name = $_FILES["file"]["tmp_name"][$key];
+      $name = $_FILES["file"]["name"][$key];
+      move_uploaded_file($tmp_name, "uploads/$name");
+      $response .= "$name uploaded successfully<br>";
+    }
+  }
+  echo $response;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap demo</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div>
+      <!-- modal start -->
+      <div id="modal-overlay">
+        <div id="modal">
+          <div class="modal-header">
+            <h2>Attachments Pop Up Window</h2>
+          </div>
+
+          <!-- <div class="modal-content">
+            <p>Please upload multiple attachment : </p>
+            <input
+              type="file"
+              multiple
+              name="file"
+              id="file"
+              onchange="javascript:updateList()"
+            />
+
+            <p>Selected files:</p> -->
+
+            <div id="fileList"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button id="close-modal">Close</button>
+            <button>Save</button>
+          </div>
+        </div>
+      </div>
+      <!-- modal end  -->
+      <div class="mainArea">
+        <div class="card cardArea">
+          <div class="card-header">
+            <div class="card-header-content">
+              <div class="box"></div>
+              <h3>Incomplete</h3>
+            </div>
+
+            <h4><button>0</button></h4>
+          </div>
+          <!-- <div class="card-body">
+               <h1> <i class="fas fa-cat"></i> This is a heading!</h1>
+           </div> -->
+
+          <div class="veriousCard">
+            <div class="card cardContent1">
+              <div class="cardContent-header1">
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/images.jpeg" alt="img1" />
+                    <h3>client Name</h3>
+                  </div>
+                </div>
+                <div class="card-header-item">
+                  <div class="box1">
+                    <img src="assets/img2.png" alt="img2" />
+                    <h3>Sadik Istiak</h3>
+                  </div>
+                </div>
+
+                <!-- <h4><button>0</button></h4> -->
+              </div>
+              <div class="cardContent-container">
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>Lorem ipsum dolor sit amet curn...</span>
+                </p>
+                <p>
+                  <i class="fas fas fa-database container-left-icon"></i
+                  ><span>1/2</span>
+                </p>
+              </div>
+              <div class="cardContent-footer">
+                <img src="assets/images.jpeg" alt="img1" />
+                <img src="assets/img2.png" alt="img2" />
+                <button>12+</button>
+                <p><i class="fas fa-comments"></i><span>15</span></p>
+                <p>
+                  <button id="open-modal">
+                    <i class="fas fa-paperclip"></i></button
+                  ><span>25</span>
+                </p>
+                <p><i class="fas fa-calendar"></i><span>25-12-2022</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // Show Modal
+      const openModalButton = document.getElementById("open-modal");
+      const modalWindowOverlay = document.getElementById("modal-overlay");
+
+      const showModalWindow = () => {
+        modalWindowOverlay.style.display = "flex";
+      };
+      openModalButton.addEventListener("click", showModalWindow);
+
+      // Hide Modal
+      const closeModalButton = document.getElementById("close-modal");
+
+      const hideModalWindow = () => {
+        modalWindowOverlay.style.display = "none";
+      };
+
+      closeModalButton.addEventListener("click", hideModalWindow);
+
+      // Hide On Blur
+
+      const hideModalWindowOnBlur = (e) => {
+        if (e.target === e.currentTarget) {
+          console.log(e.target === e.currentTarget);
+          hideModalWindow();
+        }
+      };
+
+      modalWindowOverlay.addEventListener("click", hideModalWindowOnBlur);
+    </script>
+    <script>
+      updateList = function () {
+        var input = document.getElementById("file");
+        var output = document.getElementById("fileList");
+        var children = "";
+        for (var i = 0; i < input.files.length; ++i) {
+          children += "<li>" + input.files.item(i).name + "</li>";
+        }
+        output.innerHTML = "<ul>" + children + "</ul>";
+      };
+   
+    async function uploadFile() {
+    let formData = new FormData();           
+    formData.append("file", fileupload.files[0]);
+    await fetch('/index.php', {
+      method: "POST", 
+      body: formData
+    });    
+    alert('The file has been uploaded successfully.');
+}
+
+    </script>
+  </body>
+</html>
