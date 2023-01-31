@@ -52,16 +52,17 @@
               id="file"
               onchange="javascript:updateList()"
             /> -->
-
-            <p>Selected files:</p>
-
-            <div id="fileList"></div>
+     
+               <p>Selected files:</p>
+               <div id="fileList">
+      
+            </div>
             <!--  -->
             <form enctype="multipart/form-data" action="" method="post">
                 <input type="file" name="fileImg[]" id="fileImg" multiple onchange="preview();">
                 <button type="button" onclick="submitData();">Submit</button>
             </form>
-            <p>Preview</p>
+            <p> Preview</p>
             <div id="preview"> </div>
             
             <!--  -->
